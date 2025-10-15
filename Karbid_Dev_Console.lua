@@ -30,7 +30,7 @@ ScreenGui.Name = "KarbidConsole"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.IgnoreGuiInset = true
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-ScreenGui.DisplayOrder = -1
+ScreenGui.DisplayOrder = 6
 ScreenGui.Parent = GuiParent
 
 -- Create main Frame (black cover)
@@ -225,3 +225,6 @@ if _G.ConsoleLogConnection then
 	_G.ConsoleLogConnection:Disconnect()
 	_G.ConsoleLogConnection = nil
 end
+
+print("GuiParent : "..GuiParent)
+
