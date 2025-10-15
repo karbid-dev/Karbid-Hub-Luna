@@ -1,1 +1,29 @@
-print("Server_List")
+return {
+	[8067966563] = "_001_FightAnimeBosses",
+	[6170143659] = "_002_Demonology",
+	[5320559762] = "_003_SlimeIncremental",
+	[7236441063] = "_004_FindTheDifferences",
+	[8339716476] = "_005_KPopDemonHuntersSpeedClicker",
+	[8353463684] = "_006_TradeABrainrot",
+	[8374113155] = "_007_StealCookies",
+	[8421539913] = "_008_MixABrainrot",
+	[8306754181] = "_009_CleanAHouse",
+	[8430945866] = "_010_BrainrotZombieEvolution",
+	[8422427616] = "_011_DontWakeTheFish",
+	[6701277882] = "_012_FishIt",
+	[8380556170] = "_013_DontWakeTheBrainrots",
+	[7750955984] = "_014_HuntyZombie",
+	[8352584091] = "_015_RipBrainrot",
+	[8153647770] = "_016_KickABrainrot",
+	[8305240030] = "_017_BeABeggar",
+	[4931927012] = "_018_BasketballLegends",
+	[8618085157] = "_019_MakeAArmy",
+	[7699580568] = "_020_GrassIncremental",
+	[7883776681] = "_021_RacketRivals",
+	[8448789865] = "_022_YourGoblinMine",
+	[8181828018] = "_023_V4BloxLoot",
+	[8191429227] = "_024_CutTrees",
+	[8603178384] = "_025_RepairACar",
+}
+
+-- setclipboard(tostring(game.GameId))
