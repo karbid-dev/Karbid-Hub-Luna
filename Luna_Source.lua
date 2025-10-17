@@ -1,12 +1,12 @@
-local vercount = 56 -- safest 56 CP: Logo
+local vercount = 62 -- Live: 62 Dropdown |Safest 62 Dropdown
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initiate
 local CoreGui = game:GetService("CoreGui")
 local GuiParent = CoreGui
-if gethui then
-	GuiParent = gethui()
-end
+-- if gethui then
+-- 	GuiParent = gethui()
+-- end
 
 if GuiParent:FindFirstChild("Luna UI") then
 	GuiParent:FindFirstChild("Luna UI"):Destroy()
@@ -90,6 +90,19 @@ LunaUI.SmartWindow.Visible = false
 LunaUI.Notifications.Template.Visible = false
 LunaUI.DisplayOrder = 999
 LunaUI.Parent = GuiParent
+LunaUI.SmartWindow.Line.Visible = false
+LunaUI.SmartWindow.Logo.Position = UDim2.new(0, 10, 0, 5)
+LunaUI.SmartWindow.Title.subtitle.Size = UDim2.new(0.5, 0, 0, 22)
+LunaUI.SmartWindow.Navigation.Player.icon.UIStroke.Enabled = false
+
+
+Main.Controls.Theme.ImageLabel.Image = "rbxassetid://6026568253"
+
+for _, corner in ipairs(LunaUI.SmartWindow.Elements:GetChildren()) do
+	if corner:IsA"Frame" and corner.Name ~= "Interactions" then
+		corner.BackgroundTransparency = 1
+	end
+end
 
 -- Replace MobileSupport.Interact with an ImageButton
 MobileSupport.Size = UDim2.new(0,40,0,40)
@@ -2621,10 +2634,10 @@ function Luna:CreateWindow(WindowSettings)
 				local openedsize
 				if descriptionbool then
 					closedsize = 48
-					openedsize = 300
+					openedsize = 250
 				elseif not descriptionbool then
 					closedsize = 38
-					openedsize = 290
+					openedsize = 240
 				end
 				local opened = false
 
@@ -2641,8 +2654,8 @@ function Luna:CreateWindow(WindowSettings)
 					Dropdown.Desc.Text = DropdownSettings.Description
 				end
 
-				Dropdown.List.Size = UDim2.new(1, -23, 1, -52)
-				Dropdown.OptionHolderBackground.Size = UDim2.new(1, -23, 1, -52)
+				Dropdown.List.Size = UDim2.new(1, -23, 1, -60)
+				Dropdown.OptionHolderBackground.Size = UDim2.new(1, -23, 1, -60)
 				Dropdown.Parent = TabPage
 				Dropdown.Visible = true
 
@@ -2739,7 +2752,7 @@ function Luna:CreateWindow(WindowSettings)
 					Toggle()
 					tween(
 						Dropdown.List[name],
-						{ BackgroundTransparency = 0.95, TextColor3 = Color3.fromRGB(240, 240, 240) }
+						{ BackgroundTransparency = 0.7, TextColor3 = Color3.fromRGB(240, 240, 240) }
 					)
 				end
 
@@ -5169,10 +5182,10 @@ function Luna:CreateWindow(WindowSettings)
 			local openedsize
 			if descriptionbool then
 				closedsize = 48
-				openedsize = 300
+				openedsize = 250
 			elseif not descriptionbool then
 				closedsize = 38
-				openedsize = 290
+				openedsize = 240
 			end
 			local opened = false
 
@@ -5198,8 +5211,8 @@ function Luna:CreateWindow(WindowSettings)
 				if opened then
 					tween(Dropdown.icon, { Rotation = 180 })
 					tween(Dropdown, { Size = UDim2.new(1, -25, 0, openedsize) })
-					Dropdown.List.Size = UDim2.new(1, -23, 1, -52)
-					Dropdown.OptionHolderBackground.Size = UDim2.new(1, -23, 1, -52)
+					Dropdown.List.Size = UDim2.new(1, -23, 1, -60)
+					Dropdown.OptionHolderBackground.Size = UDim2.new(1, -23, 1, -60)
 				else
 					tween(Dropdown.icon, { Rotation = 0 })
 					tween(Dropdown, { Size = UDim2.new(1, -25, 0, closedsize) })
@@ -5289,7 +5302,7 @@ function Luna:CreateWindow(WindowSettings)
 				Toggle()
 				tween(
 					Dropdown.List[name],
-					{ BackgroundTransparency = 0.95, TextColor3 = Color3.fromRGB(240, 240, 240) }
+					{ BackgroundTransparency = 0.7, TextColor3 = Color3.fromRGB(240, 240, 240) }
 				)
 			end
 
@@ -5551,7 +5564,7 @@ function Luna:CreateWindow(WindowSettings)
 					for _, name in pairs(DropdownSettings.CurrentOption) do
 						tween(
 							Dropdown.List[name],
-							{ TextColor3 = Color3.fromRGB(227, 227, 227), BackgroundTransparency = 0.95 }
+							{ TextColor3 = Color3.fromRGB(227, 227, 227), BackgroundTransparency = 0.95	 }
 						)
 					end
 				else
@@ -6437,7 +6450,7 @@ function Luna:CreateWindow(WindowSettings)
 	tween(Navigation.Line, { BackgroundTransparency = 0 })
 
 	for _, TopbarButton in ipairs(Main.Controls:GetChildren()) do
-		if TopbarButton.ClassName == "Frame" and TopbarButton.Name ~= "Theme" then
+		if TopbarButton.ClassName == "Frame" then -- and TopbarButton.Name ~= "Theme"
 			TopbarButton.Visible = true
 			tween(TopbarButton, { BackgroundTransparency = 0.25 })
 			tween(TopbarButton.UIStroke, { Transparency = 0.5 })
@@ -6524,9 +6537,12 @@ function Luna:CreateWindow(WindowSettings)
 	end)
 
 	Main.Controls.Theme.ImageLabel.MouseButton1Click:Connect(function()
-		if Window.Settings then
-			Window.Settings:Activate()
-			Elements.Settings.CanvasPosition = Vector2.new(0, 698)
+		if LunaUI.SmartWindow.Elements.BackgroundTransparency >= 1 then
+			tween(LunaUI.SmartWindow.Elements, { BackgroundTransparency = 0.1 })
+		end
+
+		if LunaUI.SmartWindow.Elements.BackgroundTransparency < 1 then
+			tween(LunaUI.SmartWindow.Elements, { BackgroundTransparency = 1 })
 		end
 	end)
 	Main.Controls.Theme["MouseEnter"]:Connect(function()
