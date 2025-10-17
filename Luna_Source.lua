@@ -1,4 +1,4 @@
-local vercount = 65 -- Live: 65 Spin |Safest 65 Spin
+local vercount = 70 -- Live: 70 Config |Safest 70 Config
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initiate
@@ -120,8 +120,13 @@ LunaUI.SmartWindow.LoadingFrame.Frame.Frame.Subtitle.Size = UDim2.new(1, 0, 0, 3
 LunaUI.SmartWindow.LoadingFrame.Frame.Frame.Subtitle.TextXAlignment = Enum.TextXAlignment.Center
 LunaUI.SmartWindow.LoadingFrame.BackgroundColor3 = Colors.MyBlack
 LunaUI.SmartWindow.Elements.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.Label.BackgroundColor3 = Color3.fromRGB(94, 94, 0)
+LunaUI.SmartWindow.Elements.Interactions.Template.Label.UIStroke.Color = Color3.fromRGB(94, 94, 0)
+LunaUI.SmartWindow.Elements.Interactions.Template.Label.BackgroundTransparency = 0.8
+LunaUI.SmartWindow.Elements.Interactions.Template.Label.icon.Image = "rbxassetid://6031068423"
 LunaUI.SmartWindow.BackgroundColor3 = Colors.MyBlack
 LunaUI.SmartWindow.BackgroundTransparency = 0.5
+
 
 
 
@@ -1319,8 +1324,8 @@ function Luna:CreateWindow(WindowSettings)
 				Label.Visible = true
 				Label.Parent = TabPage
 
-				Label.BackgroundTransparency = 1
-				Label.UIStroke.Transparency = 1
+				Label.BackgroundTransparency = 0.8
+				Label.UIStroke.Transparency = 0.5
 				Label.Text.TextTransparency = 1
 
 				if LabelSettings.Style ~= 1 then
@@ -1344,9 +1349,14 @@ function Luna:CreateWindow(WindowSettings)
 					:Play()
 
 				function LabelV:Set(NewLabel)
-					LabelSettings.Text = NewLabel
+					-- Support both string and table { Text = ... }
+					local text = NewLabel
+					if type(NewLabel) == "table" and NewLabel.Text then
+						text = NewLabel.Text
+					end
+					LabelSettings.Text = text
 					LabelV.Settings = LabelSettings
-					Label.Text.Text = NewLabel
+					Label.Text.Text = text
 				end
 
 				function LabelV:Destroy()
@@ -3581,8 +3591,8 @@ function Luna:CreateWindow(WindowSettings)
 			Label.Visible = true
 			Label.Parent = TabPage
 
-			Label.BackgroundTransparency = 1
-			Label.UIStroke.Transparency = 1
+			Label.BackgroundTransparency = 0.8
+			Label.UIStroke.Transparency = 0.5
 			Label.Text.TextTransparency = 1
 
 			if LabelSettings.Style ~= 1 then
@@ -3591,7 +3601,7 @@ function Luna:CreateWindow(WindowSettings)
 					:Play()
 			else
 				TweenService
-					:Create(Label, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), { BackgroundTransparency = 1 })
+					:Create(Label, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), { BackgroundTransparency = 0.8 })
 					:Play()
 			end
 			TweenService
@@ -3601,9 +3611,14 @@ function Luna:CreateWindow(WindowSettings)
 				:Play()
 
 			function LabelV:Set(NewLabel)
-				LabelSettings.Text = NewLabel
+				-- Support both string and table { Text = ... }
+				local text = NewLabel
+				if type(NewLabel) == "table" and NewLabel.Text then
+					text = NewLabel.Text
+				end
+				LabelSettings.Text = text
 				LabelV.Settings = LabelSettings
-				Label.Text.Text = NewLabel
+				Label.Text.Text = text
 			end
 
 			function LabelV:Destroy()
@@ -5565,25 +5580,31 @@ function Luna:CreateWindow(WindowSettings)
 					DropdownSettings.CurrentOption = {}
 				end
 
-				local bleh, ind = nil, 0
-				for i, v in pairs(DropdownSettings.CurrentOption) do
-					ind = ind + 1
-				end
-				if ind == 1 then
-					bleh = DropdownSettings.CurrentOption[1]
-				else
-					bleh = DropdownSettings.CurrentOption
-				end
-				SafeCallback(bleh)
-				for _, Option in pairs(Dropdown.List:GetChildren()) do
-					if Option.ClassName == "TextLabel" then
-						tween(Option, { TextColor3 = Color3.fromRGB(200, 200, 200), BackgroundTransparency = 0.98 })
-					end
-				end
-				tween(
-					Dropdown.List[bleh],
-					{ TextColor3 = Color3.fromRGB(240, 240, 240), BackgroundTransparency = 0.95 }
-				)
+					local bleh, ind = nil, 0
+                    for i, v in pairs(DropdownSettings.CurrentOption) do
+                        ind = ind + 1
+                    end
+                    if ind == 1 then
+                        bleh = DropdownSettings.CurrentOption[1]
+                    else
+                        bleh = DropdownSettings.CurrentOption
+                    end
+                    SafeCallback(bleh)
+
+                    -- CHANGED: safe-handle both string and table selections
+                    if type(bleh) == "string" then
+                        local child = Dropdown.List:FindFirstChild(bleh)
+                        if child then
+                            tween(child, { TextColor3 = Color3.fromRGB(240, 240, 240), BackgroundTransparency = 0.95 })
+                        end
+                    elseif type(bleh) == "table" then
+                        for _, name in ipairs(bleh) do
+                            local child = Dropdown.List:FindFirstChild(name)
+                            if child then
+                                tween(child, { TextColor3 = Color3.fromRGB(240, 240, 240), BackgroundTransparency = 0.95 })
+                            end
+                        end
+                    end
 
 				if DropdownSettings.MultipleOptions then
 					if DropdownSettings.CurrentOption and type(DropdownSettings.CurrentOption) == "table" then
@@ -5958,30 +5979,17 @@ function Luna:CreateWindow(WindowSettings)
 		end
 
 		function Tab:BuildConfigSection()
-			if isStudio then
-				Tab:CreateLabel({ Text = "Config system unavailable. (Environment isStudio)", Style = 3 })
-				return "Config system unavailable."
-			end
-
 			local inputPath = nil
 			local selectedConfig = nil
 
-			local Title = Elements.Template.Title:Clone()
-			Title.Text = "Configurations"
-			Title.Visible = true
-			Title.Parent = TabPage
-			Title.TextTransparency = 1
-			TweenService:Create(
-				Title,
-				TweenInfo.new(0.4, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out),
-				{ TextTransparency = 0 }
-			):Play()
-
-			Tab:CreateSection("Config Creator")
+			Tab:CreateLabel({
+				Text = "New Config",
+				Style = 2
+			})
 
 			Tab:CreateInput({
-				Name = "Config Name",
-				Description = "Insert a name for your to be created config.",
+				Name = "Name New Config ",
+				Description = "Example Best Use : RacketRivals1",
 				PlaceholderText = "Name",
 				CurrentValue = "",
 				Numeric = false,
@@ -5995,8 +6003,8 @@ function Luna:CreateWindow(WindowSettings)
 			local configSelection
 
 			Tab:CreateButton({
-				Name = "Create Config",
-				Description = "Create a config with all of your current settings.",
+				Name = "Create New Config",
+				Description = "Create a new config with all of your current settings",
 				Callback = function()
 					if not inputPath or string.gsub(inputPath, " ", "") == "" then
 						Luna:Notification({
@@ -6029,11 +6037,16 @@ function Luna:CreateWindow(WindowSettings)
 				end,
 			})
 
-			Tab:CreateSection("Config Load/Settings")
+			Tab:CreateDivider()
+
+			Tab:CreateLabel({
+				Text = "Save & Load Config",
+				Style = 2
+			})			
 
 			configSelection = Tab:CreateDropdown({
 				Name = "Select Config",
-				Description = "Select a config to load your settings on.",
+				-- Description = "Select a config to load your settings on.",
 				Options = Luna:RefreshConfigList(),
 				CurrentOption = {},
 				MultipleOptions = false,
@@ -6044,32 +6057,16 @@ function Luna:CreateWindow(WindowSettings)
 			})
 
 			Tab:CreateButton({
-				Name = "Load Config",
-				Description = "Load your saved config settings.",
+				Name = "Refresh Config List",
+				-- Description = "Refresh the current config list.",
 				Callback = function()
-					local success, returned = Luna:LoadConfig(selectedConfig)
-					if not success then
-						Luna:Notification({
-							Title = "Interface",
-							Icon = "error",
-							ImageSource = "Material",
-							Content = "Unable to load config, return error: " .. returned,
-						})
-						return
-					end
-
-					Luna:Notification({
-						Title = "Interface",
-						Icon = "info",
-						ImageSource = "Material",
-						Content = string.format("Loaded config %q", selectedConfig),
-					})
+					configSelection:Set({ Options = Luna:RefreshConfigList() })
 				end,
 			})
-
+			
 			Tab:CreateButton({
-				Name = "Overwrite Config",
-				Description = "Overwrite your current config settings.",
+				Name = "Save & Overwrite Config",
+				-- Description = "Overwrite your current config settings.",
 				Callback = function()
 					local success, returned = Luna:SaveConfig(selectedConfig)
 					if not success then
@@ -6092,21 +6089,52 @@ function Luna:CreateWindow(WindowSettings)
 			})
 
 			Tab:CreateButton({
-				Name = "Refresh Config List",
-				Description = "Refresh the current config list.",
+				Name = "Load Config",
+				-- Description = "Load your saved config settings.",
 				Callback = function()
-					configSelection:Set({ Options = Luna:RefreshConfigList() })
+					local success, returned = Luna:LoadConfig(selectedConfig)
+					if not success then
+						Luna:Notification({
+							Title = "Interface",
+							Icon = "error",
+							ImageSource = "Material",
+							Content = "Unable to load config, return error: " .. returned,
+						})
+						return
+					end
+
+					Luna:Notification({
+						Title = "Interface",
+						Icon = "info",
+						ImageSource = "Material",
+						Content = string.format("Loaded config %q", selectedConfig),
+					})
 				end,
 			})
 
-			local loadlabel
+			Tab:CreateDivider()
+
+			local loadlabel = Tab:CreateLabel({
+				Text = "Current Autoload Config : None",
+				Style = 1
+			})
+
 			Tab:CreateButton({
-				Name = "Set as autoload",
-				Description = "Set a config to auto load setting in your next session.",
+				Name = "Set Autoload Config",
+				Description = "Set a config to autoload on your next session",
 				Callback = function()
 					local name = selectedConfig
+					if not name or tostring(name) == "" then
+						Luna:Notification({
+							Title = "Interface",
+							Icon = "warning",
+							ImageSource = "Material",
+							Content = "Please select a config before setting autoload.",
+						})
+						return
+					end
 					writefile(Luna.Folder .. "/settings/autoload.txt", name)
-					loadlabel:Set({ Text = "Current autoload config: " .. name })
+					loadlabel:Set({ Text = "Current Autoload Config : " .. name })
 
 					Luna:Notification({
 						Title = "Interface",
@@ -6117,18 +6145,13 @@ function Luna:CreateWindow(WindowSettings)
 				end,
 			})
 
-			loadlabel = Tab:CreateParagraph({
-				Title = "Current Auto Load",
-				Text = "None",
-			})
-
 			Tab:CreateButton({
-				Name = "Delete Autoload",
-				Description = "Delete The Autoload File",
+				Name = "Clear Autoload",
+				-- Description = "Delete The Autoload File",
 				Callback = function()
 					local name = selectedConfig
 					delfile(Luna.Folder .. "/settings/autoload.txt")
-					loadlabel:Set({ Text = "None" })
+					loadlabel:Set({ Text = "Current Autoload Config : None" })
 
 					Luna:Notification({
 						Title = "Interface",
@@ -6141,8 +6164,11 @@ function Luna:CreateWindow(WindowSettings)
 
 			if isfile(Luna.Folder .. "/settings/autoload.txt") then
 				local name = readfile(Luna.Folder .. "/settings/autoload.txt")
-				loadlabel:Set({ Text = "Current autoload config: " .. name })
+				loadlabel:Set({ Text = "Current Autoload Config : "..name })
 			end
+
+			Tab:CreateDivider()
+			-- Tab:BuildThemeSection()
 		end
 
 		local ClassParser = {
