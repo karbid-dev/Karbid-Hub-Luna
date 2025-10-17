@@ -1,18 +1,18 @@
-local vercount = 63 -- Live: 63 Dropdown |Safest 63 Dropdown
+local vercount = 65 -- Live: 65 Spin |Safest 65 Spin
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initiate
 local CoreGui = game:GetService("CoreGui")
 local GuiParent = CoreGui
-if gethui then
-	GuiParent = gethui()
-end
+-- if gethui then
+-- 	GuiParent = gethui()
+-- end
 
 if GuiParent:FindFirstChild("Luna UI") then
 	GuiParent:FindFirstChild("Luna UI"):Destroy()
 end
 
--- Services
+--------------------------------------------------------------------------------------------------------------------- ⚠️ | Services
 local isStudio
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -30,7 +30,7 @@ if RunService:IsStudio() then
 	isStudio = true
 end
 
--- Nebula Icon
+--------------------------------------------------------------------------------------------------------------------- ⚠️ | Nebula Icons
 local NebulaIconURL = "https://raw.nebulasoftworks.xyz/nebula-icon-library-loader"
 _G.NebulaIcons = loadstring(game:HttpGet(NebulaIconURL))()
 
@@ -42,7 +42,7 @@ if _G.NebulaIcons and type(_G.NebulaIcons.GetIcon) == "function" then
 	end
 end
 
--- Adjust Settings
+--------------------------------------------------------------------------------------------------------------------- ⚠️ | Colors & Themes
 local Colors = {
 	LightRed = Color3.fromRGB(230, 75, 75),
 	MedRed = Color3.fromRGB(165, 50, 50),
@@ -62,9 +62,14 @@ local PresetGradients = {
 	Blossom = { Color3.fromRGB(255, 165, 243), Color3.fromRGB(213, 129, 231), Color3.fromRGB(170, 92, 218) },
 }
 
+-- Logo = "rbxassetid://104550211022450"
+-- Logo Invert = "rbxassetid://83685520252173"
 
---------------------------------------------------------------------------------------------------------------------- ⚠️ | Luna UI
+--------------------------------------------------------------------------------------------------------------------- ⚠️ | Luna Variables
 local LunaUI = game:GetObjects("rbxassetid://86467455075715")[1]
+LunaUI.DisplayOrder = 999
+LunaUI.Enabled = false
+LunaUI.Parent = GuiParent
 
 local Notifications = LunaUI.Notifications
 local NotifTemplate = Notifications.Template
@@ -85,18 +90,50 @@ local KeySystem = Main.KeySystem
 local Navigation = Main.Navigation
 local Tabs = Navigation.Tabs
 
-LunaUI.Enabled = false
-LunaUI.SmartWindow.Visible = false
+-- LunaUI.Gradients 
+
+-- LunaUI.ThemeRemote
+
+-- LunaUI.Drag
+
+-- LunaUI.MobileSupport
+
+-- LunaUI.Notifications
 LunaUI.Notifications.Template.Visible = false
-LunaUI.DisplayOrder = 999
-LunaUI.Parent = GuiParent
+
+-- LunaUI.ShadowHolder
+
+-- LunaUI.SmartWindow
+LunaUI.SmartWindow.Visible = false
+LunaUI.SmartWindow.Controls.Theme.ImageLabel.Image = "rbxassetid://6026568253"
 LunaUI.SmartWindow.Line.Visible = false
-LunaUI.SmartWindow.Logo.Position = UDim2.new(0, 10, 0, 5)
+-- LunaUI.SmartWindow.Logo.Position = UDim2.new(0, 12, 0, 5)
 LunaUI.SmartWindow.Title.subtitle.Size = UDim2.new(0.5, 0, 0, 22)
 LunaUI.SmartWindow.Navigation.Player.icon.UIStroke.Enabled = false
+LunaUI.SmartWindow.LoadingFrame.Frame.ImageLabel.AnchorPoint = Vector2.new(0.5, 1)
+LunaUI.SmartWindow.LoadingFrame.Frame.ImageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+LunaUI.SmartWindow.LoadingFrame.Frame.Frame.AnchorPoint = Vector2.new(0.5, 0)
+LunaUI.SmartWindow.LoadingFrame.Frame.Frame.Position = UDim2.new(0.5, 0, 0, 0)
+LunaUI.SmartWindow.LoadingFrame.Frame.Frame.Title.Size = UDim2.new(1, 0, 0, 36)
+LunaUI.SmartWindow.LoadingFrame.Frame.Frame.Title.TextXAlignment = Enum.TextXAlignment.Center
+LunaUI.SmartWindow.LoadingFrame.Frame.Frame.Subtitle.Size = UDim2.new(1, 0, 0, 36)
+LunaUI.SmartWindow.LoadingFrame.Frame.Frame.Subtitle.TextXAlignment = Enum.TextXAlignment.Center
+LunaUI.SmartWindow.LoadingFrame.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.BackgroundTransparency = 0.5
 
 
-Main.Controls.Theme.ImageLabel.Image = "rbxassetid://6026568253"
+
+
+
+
+
+
+
+
+
+
 
 for _, corner in ipairs(LunaUI.SmartWindow.Elements:GetChildren()) do
 	if corner:IsA"Frame" and corner.Name ~= "Interactions" then
@@ -121,8 +158,8 @@ if MobileSupport and MobileSupport.Interact and MobileSupport.Interact:IsA("Text
     newInteract.BorderSizePixel = oldInteract.BorderSizePixel
     newInteract.ZIndex = oldInteract.ZIndex
     newInteract.Visible = oldInteract.Visible
-    newInteract.Image = "rbxassetid://89692386948022"
-	newInteract.HoverImage = "rbxassetid://128566822005111"
+    newInteract.Image = "rbxassetid://104550211022450"
+	newInteract.HoverImage = "rbxassetid://83685520252173"
     newInteract.ImageTransparency = 0
     newInteract.ScaleType = Enum.ScaleType.Stretch
     
@@ -492,8 +529,8 @@ function Luna:CreateWindow(WindowSettings)
 	Main.Controls.Close.ImageLabel.Image = "rbxassetid://6031075929"
 	Main.Title.Title.Text = WindowSettings.Name
 	Main.Title.subtitle.Text = WindowSettings.Subtitle
-	Main.Logo.Image = "rbxassetid://" .. WindowSettings.LogoID
-	Main.Logo.HoverImage = "rbxassetid://128566822005111"
+	Main.Logo.Image = "rbxassetid://104550211022450"
+	Main.Logo.HoverImage = "rbxassetid://83685520252173"
 	Main.Visible = true
 	Main.BackgroundTransparency = 1
 	Main.Size = MainSize
@@ -503,7 +540,7 @@ function Luna:CreateWindow(WindowSettings)
 	LoadingFrame.Frame.Frame.Subtitle.TextTransparency = 1
 	LoadingFrame.Version.TextTransparency = 1
 	LoadingFrame.Frame.ImageLabel.ImageTransparency = 1
-	LoadingFrame.Frame.ImageLabel.Image = "rbxassetid://72605762398328"
+	LoadingFrame.Frame.ImageLabel.Image = "rbxassetid://104550211022450"
 
 	tween(Elements.Parent, { BackgroundTransparency = 1 })
 	Elements.Parent.Visible = false
@@ -760,7 +797,7 @@ function Luna:CreateWindow(WindowSettings)
             TweenService:Create(
                 Main,
                 TweenInfo.new(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out),
-                { BackgroundTransparency = 0.2, Size = MainSize }
+                { BackgroundTransparency = 0.5, Size = MainSize }
             ):Play()
             TweenService:Create(
                 ShadowHolder,
@@ -6460,14 +6497,13 @@ function Luna:CreateWindow(WindowSettings)
 
 	Main.Controls.Close.ImageLabel.MouseButton1Click:Connect(function()
 		Hide(Main, Window.Bind, true)
-		
 		dragBar.Visible = false
 		Window.State = false
-		-- if UserInputService.KeyboardEnabled == false then
-			MobileSupport.Visible = true
-		-- end
-
+		MobileSupport.Visible = true
 	end)
+
+	local spinTween = nil
+
 	Main.Controls.Close["MouseEnter"]:Connect(function()
 		tween(Main.Controls.Close.ImageLabel, { ImageColor3 = Color3.new(1, 1, 1) })
 	end)
@@ -6560,6 +6596,40 @@ function Luna:CreateWindow(WindowSettings)
 	end)
 
 	return Window
+end
+
+MobileSupport:GetPropertyChangedSignal("Visible"):Connect(function()
+	if MobileSupport.Visible then
+		if spinTween then spinTween:Cancel() end
+		spinTween = TweenService:Create(MobileSupport.Interact, TweenInfo.new(3, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1, false, 0), { Rotation = 360 })
+		spinTween:Play()
+	else
+		if spinTween then
+			spinTween:Cancel()
+			MobileSupport.Interact.Rotation = 0
+		end
+	end
+end)
+
+local logoSpinTween = nil
+Main:GetPropertyChangedSignal("Visible"):Connect(function()
+	if Main.Visible then
+		if logoSpinTween then logoSpinTween:Cancel() end
+		logoSpinTween = TweenService:Create(Main.Logo, TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1, false, 0), { Rotation = 360 })
+		logoSpinTween:Play()
+	else
+		if logoSpinTween then
+			logoSpinTween:Cancel()
+			Main.Logo.Rotation = 0
+		end
+	end
+end)
+
+-- Start logo spin immediately on script execute (since Main is initially visible)
+if Main.Visible then
+    if logoSpinTween then logoSpinTween:Cancel() end
+    logoSpinTween = TweenService:Create(Main.Logo, TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1, false, 0), { Rotation = 360 })
+    logoSpinTween:Play()
 end
 
 function Luna:Destroy()
