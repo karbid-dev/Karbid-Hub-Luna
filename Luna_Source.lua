@@ -1,12 +1,12 @@
-local vercount = 71 -- Live: 71 Danger Zone
+local vercount = 73 -- Live: 73 Fullscreen
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initiate
 local CoreGui = game:GetService("CoreGui")
 local GuiParent = CoreGui
-if gethui then
-	GuiParent = gethui()
-end
+-- if gethui then
+-- 	GuiParent = gethui()
+-- end
 
 if GuiParent:FindFirstChild("Luna UI") then
 	GuiParent:FindFirstChild("Luna UI"):Destroy()
@@ -455,41 +455,73 @@ local function Hide(Window, bind, notif)
 	Luna:Notification({
 		Title = "Interface Hidden",
 		Content = "Re-Open By Pressing ["
-			.. tostring(bind)
+			.. string.split(tostring(bind), ".")[3]
 			.. "]",
 		Icon = "visibility_off",
 		Duration = 1.5,
 	})
 end
 
+
+
 local function Unhide(Window, currentTab)
 	Window.Visible = true
 	ShadowHolder.Visible = true
 end
 
-local MainSize
-local MinSize
-if Camera.ViewportSize.X > 774 and Camera.ViewportSize.Y > 503 then
-	MainSize = UDim2.fromOffset(675, 424)
-	MinSize = UDim2.fromOffset(500, 42)
-else
-	MainSize = UDim2.fromOffset(Camera.ViewportSize.X - 100, Camera.ViewportSize.Y - 100)
-	MinSize = UDim2.fromOffset(Camera.ViewportSize.X - 275, 42)
+-- local MainSize
+-- local MinSize
+-- if Camera.ViewportSize.X > 774 and Camera.ViewportSize.Y > 503 then
+-- 	MainSize = UDim2.fromOffset(675, 424)
+-- 	MinSize = UDim2.fromOffset(500, 42)
+-- else
+-- 	MainSize = UDim2.fromOffset(Camera.ViewportSize.X - 100, Camera.ViewportSize.Y - 100)
+-- 	MinSize = UDim2.fromOffset(Camera.ViewportSize.X - 275, 42)
+-- end
+
+-- local function Maximise(Window)
+-- 	Window.Controls.ToggleSize.ImageLabel.Image = "rbxassetid://10137941941"
+-- 	tween(Window, { Size = MainSize })
+-- 	Window.Elements.Visible = true
+-- 	Window.Navigation.Visible = true
+-- end
+
+-- local function Minimize(Window)
+-- 	Window.Controls.ToggleSize.ImageLabel.Image = "rbxassetid://11036884234"
+-- 	Window.Elements.Visible = false
+-- 	Window.Navigation.Visible = false
+-- 	tween(Window, { Size = MinSize })
+-- end
+
+
+local MainSize = UDim2.fromOffset(675, 424)
+local MainPos = UDim2.new(0.5,0,0.5,0)
+local MainAnchor = Vector2.new(0.5, 0.5)
+local MaxSize = UDim2.new(1, -10, 0.9, 0) -- Actually MaxSize
+local MaxPos = UDim2.new(0.5,0,1,-5)
+local MaxAnchor = Vector2.new(0.5, 1)
+
+local function Minimize(Window)
+	Window.Controls.ToggleSize.ImageLabel.Image = "rbxassetid://6031094681"
+	-- Window.Elements.Visible = true
+	-- Window.Navigation.Visible = true
+	-- Window.AnchorPoint = Vector2.new(0.5, 0.5)
+	-- Window.Position = UDim2.new(0.5,0,0.5,0)
+	tween(Window, { Size = MainSize, Position = MainPos, AnchorPoint = MainAnchor })
+	tween(LunaUI.ShadowHolder, { AnchorPoint = MainAnchor })
 end
 
 local function Maximise(Window)
-	Window.Controls.ToggleSize.ImageLabel.Image = "rbxassetid://10137941941"
-	tween(Window, { Size = MainSize })
-	Window.Elements.Visible = true
-	Window.Navigation.Visible = true
+	Window.Controls.ToggleSize.ImageLabel.Image = "rbxassetid://6031094691"
+	-- Window.Elements.Visible = true
+	-- Window.Navigation.Visible = true
+	-- Window.AnchorPoint = Vector2.new(0.5, 1)
+
+	-- Window.Position = UDim2.new(0.5,0,1,-5)
+	tween(Window, { Size = MaxSize, Position = MaxPos, AnchorPoint = MaxAnchor })
+	tween(LunaUI.ShadowHolder, { AnchorPoint = MaxAnchor })
 end
 
-local function Minimize(Window)
-	Window.Controls.ToggleSize.ImageLabel.Image = "rbxassetid://11036884234"
-	Window.Elements.Visible = false
-	Window.Navigation.Visible = false
-	tween(Window, { Size = MinSize })
-end
 
 function Luna:CreateWindow(WindowSettings)
 	WindowSettings = Kwargify({
@@ -529,8 +561,9 @@ function Luna:CreateWindow(WindowSettings)
 
 	local Passthrough = false
 
-	local Window = { Bind = Enum.KeyCode.K, CurrentTab = nil, State = true, Size = false, Settings = nil }
-
+	local Window = { Bind = Enum.KeyCode.K, CurrentTab = nil, State = true, Size = true, Settings = nil }
+	
+	Main.Controls.ToggleSize.ImageLabel.Image = "rbxassetid://6031094681"
 	Main.Controls.Close.ImageLabel.Image = "rbxassetid://6031075929"
 	Main.Title.Title.Text = WindowSettings.Name
 	Main.Title.subtitle.Text = WindowSettings.Subtitle
@@ -2886,10 +2919,8 @@ function Luna:CreateWindow(WindowSettings)
 				end
 
 				local function PlayerTableRefresh()
-					for i, v in pairs(DropdownSettings.Options) do
-						table.remove(DropdownSettings.Options, i)
-					end
-
+					DropdownSettings.Options = {}
+	
 					for i, v in pairs(Players:GetChildren()) do
 						table.insert(DropdownSettings.Options, v.Name)
 					end
@@ -5463,6 +5494,15 @@ function Luna:CreateWindow(WindowSettings)
 			end)
 
 			if DropdownSettings.SpecialType == "Player" then
+				Tab:CreateButton({
+					Name = "Refresh Player List",
+					Callback = function()
+						DropdownSettings.Options = {}
+						PlayerTableRefresh()
+						-- Refresh()
+					end
+				})
+
 				for i, v in pairs(DropdownSettings.Options) do
 					table.remove(DropdownSettings.Options, i)
 				end
@@ -6655,6 +6695,8 @@ function Luna:CreateWindow(WindowSettings)
 	Main.Controls.ToggleSize["MouseLeave"]:Connect(function()
 		tween(Main.Controls.ToggleSize.ImageLabel, { ImageColor3 = Color3.fromRGB(195, 195, 195) })
 	end)
+
+	
 
 	Main.Controls.Theme.ImageLabel.MouseButton1Click:Connect(function()
 		if LunaUI.SmartWindow.Elements.BackgroundTransparency >= 1 then
