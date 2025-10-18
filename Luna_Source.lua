@@ -4,9 +4,9 @@ print("Ver_Source: 2.0." .. vercount)
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initiate
 local CoreGui = game:GetService("CoreGui")
 local GuiParent = CoreGui
--- if gethui then
--- 	GuiParent = gethui()
--- end
+if gethui then
+	GuiParent = gethui()
+end
 
 if GuiParent:FindFirstChild("Luna UI") then
 	GuiParent:FindFirstChild("Luna UI"):Destroy()
@@ -110,8 +110,9 @@ LunaUI.SmartWindow.Line.Visible = false
 -- LunaUI.SmartWindow.Logo.Position = UDim2.new(0, 12, 0, 5)
 LunaUI.SmartWindow.Title.subtitle.Size = UDim2.new(0.5, 0, 0, 22)
 LunaUI.SmartWindow.Navigation.Player.icon.UIStroke.Enabled = false
-LunaUI.SmartWindow.LoadingFrame.Frame.ImageLabel.AnchorPoint = Vector2.new(0.5, 1)
+LunaUI.SmartWindow.LoadingFrame.Frame.ImageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
 LunaUI.SmartWindow.LoadingFrame.Frame.ImageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+LunaUI.SmartWindow.LoadingFrame.Frame.Frame.Visible = false
 LunaUI.SmartWindow.LoadingFrame.Frame.Frame.AnchorPoint = Vector2.new(0.5, 0)
 LunaUI.SmartWindow.LoadingFrame.Frame.Frame.Position = UDim2.new(0.5, 0, 0, 0)
 LunaUI.SmartWindow.LoadingFrame.Frame.Frame.Title.Size = UDim2.new(1, 0, 0, 36)
