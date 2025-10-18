@@ -1,4 +1,4 @@
-local vercount = 70 -- Live: 70 Config |Safest 70 Config
+local vercount = 71 -- Live: 71 Danger Zone
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initiate
@@ -1182,6 +1182,7 @@ function Luna:CreateWindow(WindowSettings)
 				if ButtonSettings.Description ~= nil and ButtonSettings.Description ~= "" then
 					Button.Desc.Text = ButtonSettings.Description
 				end
+				Button.BackgroundColor3 = ButtonSettings.Color or nil
 				Button.Visible = true
 				Button.Parent = TabPage
 
@@ -6044,6 +6045,11 @@ function Luna:CreateWindow(WindowSettings)
 				Style = 2
 			})			
 
+			local loadlabel = Tab:CreateLabel({
+				Text = "Current Autoload Config : None",
+				Style = 1
+			})
+
 			configSelection = Tab:CreateDropdown({
 				Name = "Select Config",
 				-- Description = "Select a config to load your settings on.",
@@ -6112,15 +6118,8 @@ function Luna:CreateWindow(WindowSettings)
 				end,
 			})
 
-			Tab:CreateDivider()
-
-			local loadlabel = Tab:CreateLabel({
-				Text = "Current Autoload Config : None",
-				Style = 1
-			})
-
 			Tab:CreateButton({
-				Name = "Set Autoload Config",
+				Name = "Set As Autoload Config",
 				Description = "Set a config to autoload on your next session",
 				Callback = function()
 					local name = selectedConfig
@@ -6145,6 +6144,12 @@ function Luna:CreateWindow(WindowSettings)
 				end,
 			})
 
+			Tab:CreateDivider()
+			Tab:CreateLabel({
+				Text = "Danger Zone",
+				Style = 3
+			})	
+			
 			Tab:CreateButton({
 				Name = "Clear Autoload",
 				-- Description = "Delete The Autoload File",
@@ -6162,13 +6167,66 @@ function Luna:CreateWindow(WindowSettings)
 				end,
 			})
 
+
+			Tab:CreateButton({
+				Name = "Delete Config",
+				Description = "Delete the selected config file",
+				Callback = function()
+					local name = selectedConfig
+					if not name or tostring(name) == "" then
+						Luna:Notification({
+							Title = "Interface",
+							Icon = "warning",
+							ImageSource = "Material",
+							Content = "Please select a config to delete.",
+						})
+						return
+					end
+
+					local configPath = Luna.Folder .. "/settings/" .. name .. ".luna"
+					local autoloadPath = Luna.Folder .. "/settings/autoload.txt"
+
+					-- Check if autoload is set to this config
+					if isfile(autoloadPath) then
+						local autoloadName = readfile(autoloadPath)
+						if autoloadName == name then
+							delfile(autoloadPath)
+							loadlabel:Set({ Text = "Current Autoload Config : None" })
+							Luna:Notification({
+								Title = "Interface",
+								Icon = "info",
+								ImageSource = "Material",
+								Content = "Autoload cleared because the config was deleted.",
+							})
+						end
+					end
+
+					if isfile(configPath) then
+						delfile(configPath)
+						Luna:Notification({
+							Title = "Interface",
+							Icon = "info",
+							ImageSource = "Material",
+							Content = string.format("Deleted config %q", name),
+						})
+						configSelection:Set({ Options = Luna:RefreshConfigList() })
+					else
+						Luna:Notification({
+							Title = "Interface",
+							Icon = "error",
+							ImageSource = "Material",
+							Content = "Config file not found.",
+						})
+					end
+				end,
+			})
+
 			if isfile(Luna.Folder .. "/settings/autoload.txt") then
 				local name = readfile(Luna.Folder .. "/settings/autoload.txt")
 				loadlabel:Set({ Text = "Current Autoload Config : "..name })
 			end
 
 			Tab:CreateDivider()
-			-- Tab:BuildThemeSection()
 		end
 
 		local ClassParser = {
