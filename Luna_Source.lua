@@ -5,9 +5,9 @@ print("Ver_Source: 2.0." .. vercount)
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initialization
 local CoreGui = game:GetService("CoreGui")
 local GuiParent = CoreGui
--- if gethui then
--- 	GuiParent = gethui()
--- end
+if gethui then
+	GuiParent = gethui()
+end
 
 if GuiParent:FindFirstChild("Luna UI") then
 	GuiParent:FindFirstChild("Luna UI"):Destroy()
