@@ -1,12 +1,13 @@
-local vercount = 74 -- Live: 74 Main Size
+--------------------------------------------------------------------------------------------------------------------- ⚠️ | Version
+local vercount = 75 -- Live: 75 KarbidTheme
 print("Ver_Source: 2.0." .. vercount)
 
---------------------------------------------------------------------------------------------------------------------- ⚠️ | Initiate
+--------------------------------------------------------------------------------------------------------------------- ⚠️ | Initialization
 local CoreGui = game:GetService("CoreGui")
 local GuiParent = CoreGui
-if gethui then
-	GuiParent = gethui()
-end
+-- if gethui then
+-- 	GuiParent = gethui()
+-- end
 
 if GuiParent:FindFirstChild("Luna UI") then
 	GuiParent:FindFirstChild("Luna UI"):Destroy()
@@ -46,7 +47,7 @@ end
 local Colors = {
 	LightRed = Color3.fromRGB(230, 75, 75),
 	MedRed = Color3.fromRGB(165, 50, 50),
-	DarkRed = Color3.fromRGB(80, 15, 15),
+	DarkRed = Color3.fromRGB(120, 15, 15),
 	MyBlack = Color3.fromRGB(25, 25, 25),
 	MyWhite = Color3.fromRGB(230, 230, 230),
 }
@@ -61,14 +62,14 @@ local PresetGradients = {
 	Daylight = { Color3.fromRGB(51, 156, 255), Color3.fromRGB(89, 171, 237), Color3.fromRGB(127, 186, 218) },
 	Blossom = { Color3.fromRGB(255, 165, 243), Color3.fromRGB(213, 129, 231), Color3.fromRGB(170, 92, 218) },
 }
+--------------------------------------------------------------------------------------------------------------------- ⚠️ | Luna UI
+-- Karbid Logo = "rbxassetid://104550211022450"
+-- Karbid Logo Invert = "rbxassetid://83685520252173"
 
--- Logo = "rbxassetid://104550211022450"
--- Logo Invert = "rbxassetid://83685520252173"
-
---------------------------------------------------------------------------------------------------------------------- ⚠️ | Luna Variables
+-- Luna UI
 local LunaUI = game:GetObjects("rbxassetid://86467455075715")[1]
-LunaUI.DisplayOrder = 999
 LunaUI.Enabled = false
+LunaUI.DisplayOrder = 999
 LunaUI.Parent = GuiParent
 
 local Notifications = LunaUI.Notifications
@@ -77,7 +78,6 @@ local NotifTemplate = Notifications.Template
 local Main = LunaUI.SmartWindow -- Smart Window
 local ShadowHolder = LunaUI.ShadowHolder
 
-local NotifTemplate = Notifications.Template
 local MobileSupport = LunaUI.MobileSupport
 local dragBar = LunaUI.Drag -- Bottom Bar
 local dragInteract = dragBar and dragBar.Interact or nil -- Bar Button
@@ -180,17 +180,17 @@ if MobileSupport and MobileSupport.Interact and MobileSupport.Interact:IsA("Text
 
 end
 
-
 local Release = "Karbid Version 2.0"
 local Luna = {
 	Folder = "Luna",
 	Options = {},
 	ThemeGradient = ColorSequence.new({
-		ColorSequenceKeypoint.new(0.00, Colors.LightRed),
+		ColorSequenceKeypoint.new(0.00, Colors.DarkRed),
 		ColorSequenceKeypoint.new(0.50, Colors.MedRed),
-		ColorSequenceKeypoint.new(1.00, Colors.DarkRed),
+		ColorSequenceKeypoint.new(1.00, Colors.LightRed),
 	}),
 }
+
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Functions
 local function RemoveTable(tablre, value)
@@ -882,6 +882,7 @@ function Luna:CreateWindow(WindowSettings)
             ):Play()
             wait(0.4)
             LoadingFrame.Visible = false
+			LunaUI.ThemeRemote.Value = not LunaUI.ThemeRemote.Value
         end)
     end
 
