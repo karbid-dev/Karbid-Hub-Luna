@@ -1,4 +1,4 @@
-local vercount = 73 -- Live: 73 Fullscreen
+local vercount = 74 -- Live: 74 Main Size
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initiate
@@ -495,12 +495,19 @@ end
 -- end
 
 
-local MainSize = UDim2.fromOffset(675, 424)
+local MainSize
 local MainPos = UDim2.new(0.5,0,0.5,0)
 local MainAnchor = Vector2.new(0.5, 0.5)
 local MaxSize = UDim2.new(1, -10, 0.9, 0) -- Actually MaxSize
 local MaxPos = UDim2.new(0.5,0,1,-5)
 local MaxAnchor = Vector2.new(0.5, 1)
+
+local MainSize
+if Camera.ViewportSize.X > 774 and Camera.ViewportSize.Y > 503 then
+	MainSize = UDim2.fromOffset(675, 424)
+else
+	MainSize = UDim2.fromOffset(Camera.ViewportSize.X - 100, Camera.ViewportSize.Y - 100)
+end
 
 local function Minimize(Window)
 	Window.Controls.ToggleSize.ImageLabel.Image = "rbxassetid://6031094681"
