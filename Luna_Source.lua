@@ -1,5 +1,4 @@
---------------------------------------------------------------------------------------------------------------------- ⚠️ | Version
-local vercount = 75 -- Live: 75 KarbidTheme
+local vercount = 77 -- Live: 75 KarbidTheme
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initialization
@@ -9,9 +8,12 @@ if gethui then
 	GuiParent = gethui()
 end
 
-if GuiParent:FindFirstChild("Luna UI") then
-	GuiParent:FindFirstChild("Luna UI"):Destroy()
+for _, gui in ipairs(GuiParent:GetChildren()) do
+	if gui.Name == ("Luna UI") then
+		gui:Destroy()
+	end
 end
+
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Services
 local isStudio
@@ -90,20 +92,7 @@ local KeySystem = Main.KeySystem
 local Navigation = Main.Navigation
 local Tabs = Navigation.Tabs
 
--- LunaUI.Gradients 
-
--- LunaUI.ThemeRemote
-
--- LunaUI.Drag
-
--- LunaUI.MobileSupport
-
--- LunaUI.Notifications
 LunaUI.Notifications.Template.Visible = false
-
--- LunaUI.ShadowHolder
-
--- LunaUI.SmartWindow
 LunaUI.SmartWindow.Visible = false
 LunaUI.SmartWindow.Controls.Theme.ImageLabel.Image = "rbxassetid://6026568253"
 LunaUI.SmartWindow.Line.Visible = false
@@ -121,21 +110,29 @@ LunaUI.SmartWindow.LoadingFrame.Frame.Frame.Subtitle.Size = UDim2.new(1, 0, 0, 3
 LunaUI.SmartWindow.LoadingFrame.Frame.Frame.Subtitle.TextXAlignment = Enum.TextXAlignment.Center
 LunaUI.SmartWindow.LoadingFrame.BackgroundColor3 = Colors.MyBlack
 LunaUI.SmartWindow.Elements.BackgroundColor3 = Colors.MyBlack
-LunaUI.SmartWindow.Elements.Interactions.Template.Label.BackgroundColor3 = Color3.fromRGB(94, 94, 0)
-LunaUI.SmartWindow.Elements.Interactions.Template.Label.UIStroke.Color = Color3.fromRGB(94, 94, 0)
-LunaUI.SmartWindow.Elements.Interactions.Template.Label.BackgroundTransparency = 0.8
-LunaUI.SmartWindow.Elements.Interactions.Template.Label.icon.Image = "rbxassetid://6031068423"
+
 LunaUI.SmartWindow.BackgroundColor3 = Colors.MyBlack
-LunaUI.SmartWindow.BackgroundTransparency = 0.5
+LunaUI.SmartWindow.BackgroundTransparency = 0
 
-
-
-
-
-
-
-
-
+-- Template Coloring
+LunaUI.SmartWindow.Elements.BackgroundTransparency = 0
+LunaUI.SmartWindow.Elements.Interactions.Template.Button.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.ButtonDesc.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.Bind.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.BindDesc.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.Dropdown.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.DropdownDesc.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.Input.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.InputDesc.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.Label.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+LunaUI.SmartWindow.Elements.Interactions.Template.Label.UIStroke.Color = Color3.fromRGB(255, 255, 0)
+LunaUI.SmartWindow.Elements.Interactions.Template.Label.icon.Image = "rbxassetid://6031068423"
+LunaUI.SmartWindow.Elements.Interactions.Template.Label.BackgroundTransparency = 0.8
+LunaUI.SmartWindow.Elements.Interactions.Template.Slider.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.Toggle.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.ToggleDesc.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.ToggleOn.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.ToggleOnDesc.BackgroundColor3 = Colors.MyBlack
 
 
 
@@ -347,16 +344,22 @@ function Luna:Notification(data)
 		}, data or {})
 
 		-- Notification Object Creation
+		if not data.Title then return end
 		local newNotification = NotifTemplate:Clone()
 		newNotification.Name = data.Title
 		newNotification.LayoutOrder = #Notifications:GetChildren()
 		newNotification.Visible = false
+		
+		-- Safety check: ensure newNotification and its properties exist
+		if not newNotification or not newNotification:FindFirstChild("Title") then return end
+		
 		newNotification.Title.Text = data.Title
 		newNotification.Description.Text = data.Content
 		newNotification.Icon.Image = _G.NebulaIcons:GetIcon(data.Icon, data.ImageSource)
 		newNotification.Parent = Notifications
 
 		-- Set initial transparency values
+		if not newNotification or not newNotification.Parent then return end
 		newNotification.BackgroundTransparency = 1
 		newNotification.Title.TextTransparency = 1
 		newNotification.Description.TextTransparency = 1
@@ -367,8 +370,13 @@ function Luna:Notification(data)
 
 		task.wait()
 
+		-- Safety check before animating
+		if not newNotification or not newNotification.Parent then return end
+
 		-- Calculate textbounds and set initial values
-		newNotification.Size = UDim2.new(1, 0, 0, -Notifications:FindFirstChild("UIListLayout").Padding.Offset)
+		local layoutOrder = Notifications:FindFirstChild("UIListLayout")
+		if not layoutOrder then return end
+		newNotification.Size = UDim2.new(1, 0, 0, -layoutOrder.Padding.Offset)
 
 		newNotification.Icon.Size = UDim2.new(0, 28, 0, 28)
 		newNotification.Icon.Position = UDim2.new(0, 16, 0.5, -1)
@@ -462,8 +470,6 @@ local function Hide(Window, bind, notif)
 		Duration = 1.5,
 	})
 end
-
-
 
 local function Unhide(Window, currentTab)
 	Window.Visible = true
@@ -1284,7 +1290,7 @@ function Luna:CreateWindow(WindowSettings)
 						TweenService:Create(
 							Button,
 							TweenInfo.new(0.7, Enum.EasingStyle.Exponential),
-							{ BackgroundColor3 = Color3.fromRGB(32, 30, 38) }
+							{ BackgroundColor3 = Colors.MyBlack }
 						):Play()
 						TweenService:Create(
 							Button.UIStroke,
@@ -3553,7 +3559,7 @@ function Luna:CreateWindow(WindowSettings)
 					TweenService:Create(
 						Button,
 						TweenInfo.new(0.7, Enum.EasingStyle.Exponential),
-						{ BackgroundColor3 = Color3.fromRGB(32, 30, 38) }
+						{ BackgroundColor3 = Colors.MyBlack }
 					):Play()
 					TweenService
 						:Create(
@@ -6615,7 +6621,7 @@ function Luna:CreateWindow(WindowSettings)
 	end
 
 	Elements.Parent.Visible = true
-	tween(Elements.Parent, { BackgroundTransparency = 0.1 })
+	tween(Elements.Parent, { BackgroundTransparency = 0 })
 	Navigation.Visible = true
 	tween(Navigation.Line, { BackgroundTransparency = 0 })
 
@@ -6709,7 +6715,7 @@ function Luna:CreateWindow(WindowSettings)
 
 	Main.Controls.Theme.ImageLabel.MouseButton1Click:Connect(function()
 		if LunaUI.SmartWindow.Elements.BackgroundTransparency >= 1 then
-			tween(LunaUI.SmartWindow.Elements, { BackgroundTransparency = 0.1 })
+			tween(LunaUI.SmartWindow.Elements, { BackgroundTransparency = 0 })
 		end
 
 		if LunaUI.SmartWindow.Elements.BackgroundTransparency < 1 then
