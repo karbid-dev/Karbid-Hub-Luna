@@ -6051,7 +6051,7 @@ function Luna:CreateWindow(WindowSettings)
 
 				end,
 				OnChangedCallback = function(bind)
-					Window.Bind = bind
+					Window.Bind = Enum.KeyCode[bind]
    				 end,
 			}, "WindowBinding")
 
