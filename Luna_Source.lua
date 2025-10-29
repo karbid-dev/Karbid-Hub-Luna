@@ -1,4 +1,4 @@
-local vercount = 80 -- Live: 78 Window Bind
+local vercount = 82 -- Live: 78 Window Bind
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initialization
@@ -6047,10 +6047,15 @@ function Luna:CreateWindow(WindowSettings)
 				Name = "Window Keybind",
 				CurrentBind = "K",
 				HoldToInteract = false,
-				Callback = function(keybind)
-					Window.Bind = keybind
+				Callback = function()
+
 				end,
+				OnChangedCallback = function(bind)
+					Window.Bind = bind
+   				 end,
 			}, "WindowBinding")
+
+			Tab:CreateDivider()
 
 			Tab:CreateLabel({
 				Text = "New Config",
