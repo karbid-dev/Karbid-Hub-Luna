@@ -1,4 +1,4 @@
-local vercount = 82 -- Live: 78 Window Bind
+local vercount = 84 -- Live: 78 Window Bind
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initialization
@@ -6047,10 +6047,11 @@ function Luna:CreateWindow(WindowSettings)
 				Name = "Window Keybind",
 				CurrentBind = "K",
 				HoldToInteract = false,
-				Callback = function()
-
+				Callback = function(bind)
+					print("Keybind pressed:", bind)
 				end,
 				OnChangedCallback = function(bind)
+					print("Keybind changed to:", bind)
 					Window.Bind = Enum.KeyCode[bind]
    				 end,
 			}, "WindowBinding")
