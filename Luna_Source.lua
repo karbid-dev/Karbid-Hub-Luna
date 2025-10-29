@@ -1,4 +1,4 @@
-local vercount = 77 -- Live: 75 KarbidTheme
+local vercount = 78 -- Live: 78 Window Bind
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initialization
@@ -6037,6 +6037,20 @@ function Luna:CreateWindow(WindowSettings)
 		function Tab:BuildConfigSection()
 			local inputPath = nil
 			local selectedConfig = nil
+
+			Tab:CreateLabel({
+				Text = "Hide / Show Window",
+				Style = 2
+			})
+
+			Tab:CreateBind({
+				Name = "Window Keybind",
+				CurrentBind = "K",
+				HoldToInteract = false,
+				Callback = function(bind)
+					Window.Bind = bind
+				end,
+			}, "WindowBinding")
 
 			Tab:CreateLabel({
 				Text = "New Config",
