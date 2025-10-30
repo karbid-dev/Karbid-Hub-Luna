@@ -1,4 +1,4 @@
-local vercount = 85 -- Live: 78 Window Bind
+local vercount = 95 -- Live: 95 Start Hidden
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initialization
@@ -72,6 +72,7 @@ local PresetGradients = {
 local LunaUI = game:GetObjects("rbxassetid://86467455075715")[1]
 LunaUI.Enabled = false
 LunaUI.DisplayOrder = 999
+LunaUI.IgnoreGuiInset = true
 LunaUI.Parent = GuiParent
 
 local Notifications = LunaUI.Notifications
@@ -134,6 +135,10 @@ LunaUI.SmartWindow.Elements.Interactions.Template.ToggleDesc.BackgroundColor3 = 
 LunaUI.SmartWindow.Elements.Interactions.Template.ToggleOn.BackgroundColor3 = Colors.MyBlack
 LunaUI.SmartWindow.Elements.Interactions.Template.ToggleOnDesc.BackgroundColor3 = Colors.MyBlack
 
+LunaUI.SmartWindow.Elements.Interactions.Template.Paragraph.BackgroundTransparency = 0.5
+LunaUI.SmartWindow.Elements.Interactions.Template.Paragraph.BackgroundColor3 = Colors.MyBlack
+LunaUI.SmartWindow.Elements.Interactions.Template.Dropdown.BackgroundTransparency = 0.5
+LunaUI.SmartWindow.Elements.Interactions.Template.DropdownDesc.BackgroundTransparency = 0.5
 
 
 
@@ -1435,13 +1440,13 @@ function Luna:CreateWindow(WindowSettings)
 				Paragraph.Visible = true
 				Paragraph.Parent = TabPage
 
-				Paragraph.BackgroundTransparency = 1
+				Paragraph.BackgroundTransparency = 0.5
 				Paragraph.UIStroke.Transparency = 1
 				Paragraph.Title.TextTransparency = 1
 				Paragraph.Text.TextTransparency = 1
 
 				TweenService
-					:Create(Paragraph, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), { BackgroundTransparency = 1 })
+					:Create(Paragraph, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), { BackgroundTransparency = 0.5 })
 					:Play()
 				TweenService
 					:Create(
@@ -3693,13 +3698,13 @@ function Luna:CreateWindow(WindowSettings)
 			Paragraph.Visible = true
 			Paragraph.Parent = TabPage
 
-			Paragraph.BackgroundTransparency = 1
+			Paragraph.BackgroundTransparency = 0.5
 			Paragraph.UIStroke.Transparency = 1
 			Paragraph.Title.TextTransparency = 1
 			Paragraph.Text.TextTransparency = 1
 
 			TweenService
-				:Create(Paragraph, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), { BackgroundTransparency = 1 })
+				:Create(Paragraph, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), { BackgroundTransparency = 0.5 })
 				:Play()
 			TweenService
 				:Create(Paragraph.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), { Transparency = 0.5 })
@@ -6048,10 +6053,9 @@ function Luna:CreateWindow(WindowSettings)
 				CurrentBind = "K",
 				HoldToInteract = false,
 				Callback = function(bind)
-					print("Keybind pressed:", bind)
+
 				end,
 				OnChangedCallback = function(bind)
-					print("Keybind changed to:", bind)
 					Window.Bind = Enum.KeyCode[bind]
    				 end,
 			}, "WindowBinding")
@@ -6060,7 +6064,14 @@ function Luna:CreateWindow(WindowSettings)
 				Name = "Start Window Hidden",
 				CurrentValue = false,
 				Callback = function(state)
-					Window.State = not state
+					if state then
+						Hide(Main, Window.Bind, true)
+						Window.State = false
+						MobileSupport.Visible = true
+					else
+						Main.Visible = true
+						Window.State = true
+					end
 				end
 			},	"StartWindow")
 
@@ -6726,7 +6737,7 @@ function Luna:CreateWindow(WindowSettings)
 		Window.Size = not Window.Size
 		if Window.Size then
 			Minimize(Main)
-			dragBar.Visible = false
+			dragBar.Visible = true
 		else
 			Maximise(Main)
 			dragBar.Visible = true
