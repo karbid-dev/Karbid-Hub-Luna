@@ -1,4 +1,4 @@
-local vercount = 84 -- Live: 78 Window Bind
+local vercount = 85 -- Live: 78 Window Bind
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initialization
@@ -6039,7 +6039,7 @@ function Luna:CreateWindow(WindowSettings)
 			local selectedConfig = nil
 
 			Tab:CreateLabel({
-				Text = "Hide / Show Window",
+				Text = "Window Settings",
 				Style = 2
 			})
 
@@ -6055,6 +6055,14 @@ function Luna:CreateWindow(WindowSettings)
 					Window.Bind = Enum.KeyCode[bind]
    				 end,
 			}, "WindowBinding")
+
+			Tab:CreateToggle({
+				Name = "Start Window Hidden",
+				CurrentValue = false,
+				Callback = function(state)
+					Window.State = not state
+				end
+			},	"StartWindow")
 
 			Tab:CreateDivider()
 
