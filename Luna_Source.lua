@@ -1,4 +1,4 @@
-local vercount = 95 -- Live: 95 Start Hidden
+local vercount = 96 -- Live: 95 Start Hidden
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initialization
@@ -2944,12 +2944,7 @@ function Luna:CreateWindow(WindowSettings)
 					for i, v in pairs(Players:GetChildren()) do
 						table.insert(DropdownSettings.Options, v.Name)
 					end
-				end
-
-				Dropdown.Interact.MouseButton1Click:Connect(function()
-					Toggle()
-				end)
-
+					Refresh()
 				Dropdown["MouseEnter"]:Connect(function()
 					tween(Dropdown.UIStroke, { Color = Color3.fromRGB(87, 84, 104) })
 				end)
@@ -5499,6 +5494,7 @@ function Luna:CreateWindow(WindowSettings)
 				for i, v in pairs(Players:GetChildren()) do
 					table.insert(DropdownSettings.Options, v.Name)
 				end
+				Refresh()
 			end
 
 			Dropdown.Interact.MouseButton1Click:Connect(function()
@@ -6067,7 +6063,6 @@ function Luna:CreateWindow(WindowSettings)
 					if state then
 						Hide(Main, Window.Bind, true)
 						Window.State = false
-						MobileSupport.Visible = true
 					else
 						Main.Visible = true
 						Window.State = true
