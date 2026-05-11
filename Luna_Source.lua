@@ -1,4 +1,4 @@
-local vercount = 96 -- Live: 95 Start Hidden
+local vercount = 98 -- Live: 95 Start Hidden
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initialization
@@ -2862,7 +2862,8 @@ function Luna:CreateWindow(WindowSettings)
 					for i, v in pairs(DropdownSettings.Options) do
 						local Option = Dropdown.List.Template:Clone()
 						local optionhover = false
-						Option.Text = v
+						local player = Players:FindFirstChild(v)
+						Option.Text = player and player.DisplayName or v
 						if v == "Template" then
 							v = "Template (Name)"
 						end
@@ -2944,7 +2945,12 @@ function Luna:CreateWindow(WindowSettings)
 					for i, v in pairs(Players:GetChildren()) do
 						table.insert(DropdownSettings.Options, v.Name)
 					end
-					Refresh()
+				end
+
+				Dropdown.Interact.MouseButton1Click:Connect(function()
+					Toggle()
+				end)
+
 				Dropdown["MouseEnter"]:Connect(function()
 					tween(Dropdown.UIStroke, { Color = Color3.fromRGB(87, 84, 104) })
 				end)
@@ -5410,7 +5416,8 @@ function Luna:CreateWindow(WindowSettings)
 				for i, v in pairs(DropdownSettings.Options) do
 					local Option = Dropdown.List.Template:Clone()
 					local optionhover = false
-					Option.Text = v
+					local player = Players:FindFirstChild(v)
+					Option.Text = player and player.DisplayName or v
 					if v == "Template" then
 						v = "Template (Name)"
 					end
@@ -5494,7 +5501,6 @@ function Luna:CreateWindow(WindowSettings)
 				for i, v in pairs(Players:GetChildren()) do
 					table.insert(DropdownSettings.Options, v.Name)
 				end
-				Refresh()
 			end
 
 			Dropdown.Interact.MouseButton1Click:Connect(function()
@@ -5515,7 +5521,7 @@ function Luna:CreateWindow(WindowSettings)
 					Callback = function()
 						DropdownSettings.Options = {}
 						PlayerTableRefresh()
-						-- Refresh()
+						Refresh()
 					end
 				})
 
@@ -6063,6 +6069,7 @@ function Luna:CreateWindow(WindowSettings)
 					if state then
 						Hide(Main, Window.Bind, true)
 						Window.State = false
+						MobileSupport.Visible = true
 					else
 						Main.Visible = true
 						Window.State = true
