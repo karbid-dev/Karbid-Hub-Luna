@@ -1,4 +1,4 @@
-local vercount = 98 -- Live: 95 Start Hidden
+local vercount = 99 -- Live: 95 Start Hidden
 print("Ver_Source: 2.0." .. vercount)
 
 --------------------------------------------------------------------------------------------------------------------- ⚠️ | Initialization
@@ -2539,7 +2539,11 @@ function Luna:CreateWindow(WindowSettings)
 				):Play()
 
 				Input.InputFrame.InputBox.PlaceholderText = InputSettings.PlaceholderText
-				Input.InputFrame.Size = UDim2.new(0, Input.InputFrame.InputBox.TextBounds.X + 52, 0, 30)
+				if InputSettings.CurrentValue and tostring(InputSettings.CurrentValue) ~= "" then
+					Input.InputFrame.InputBox.Text = tostring(InputSettings.CurrentValue)
+				end
+				local maxInputWidth = 220
+				Input.InputFrame.Size = UDim2.new(0, math.min(Input.InputFrame.InputBox.TextBounds.X + 52, maxInputWidth), 0, 30)
 
 				Input.InputFrame.InputBox.FocusLost:Connect(function(bleh)
 					if InputSettings.Enter then
@@ -2616,7 +2620,7 @@ function Luna:CreateWindow(WindowSettings)
 					TweenService:Create(
 						Input.InputFrame,
 						TweenInfo.new(0.55, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out),
-						{ Size = UDim2.new(0, Input.InputFrame.InputBox.TextBounds.X + 52, 0, 30) }
+						{ Size = UDim2.new(0, math.min(Input.InputFrame.InputBox.TextBounds.X + 52, maxInputWidth), 0, 30) }
 					):Play()
 					if not InputSettings.Enter then
 						local Success, Response = pcall(function()
@@ -2690,7 +2694,7 @@ function Luna:CreateWindow(WindowSettings)
 					Input.InputFrame.InputBox:CaptureFocus()
 					Input.InputFrame.InputBox.Text = tostring(InputSettings.CurrentValue)
 					Input.InputFrame.InputBox:ReleaseFocus()
-					Input.InputFrame.Size = UDim2.new(0, Input.InputFrame.InputBox.TextBounds.X + 52, 0, 42)
+					Input.InputFrame.Size = UDim2.new(0, math.min(Input.InputFrame.InputBox.TextBounds.X + 52, maxInputWidth), 0, 30)
 
 					InputV.CurrentValue = InputSettings.CurrentValue
 				end
@@ -5168,7 +5172,7 @@ function Luna:CreateWindow(WindowSettings)
 				TweenService:Create(
 					Input.InputFrame,
 					TweenInfo.new(0.55, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out),
-					{ Size = UDim2.new(0, Input.InputFrame.InputBox.TextBounds.X + 52, 0, 30) }
+					{ Size = UDim2.new(0, math.min(Input.InputFrame.InputBox.TextBounds.X + 52, maxInputWidth), 0, 30) }
 				):Play()
 				if not InputSettings.Enter then
 					local Success, Response = pcall(function()
@@ -5243,7 +5247,7 @@ function Luna:CreateWindow(WindowSettings)
 				Input.InputFrame.InputBox:CaptureFocus()
 				Input.InputFrame.InputBox.Text = tostring(InputSettings.CurrentValue)
 				Input.InputFrame.InputBox:ReleaseFocus()
-				Input.InputFrame.Size = UDim2.new(0, Input.InputFrame.InputBox.TextBounds.X + 52, 0, 42)
+				Input.InputFrame.Size = UDim2.new(0, math.min(Input.InputFrame.InputBox.TextBounds.X + 52, maxInputWidth), 0, 30)
 
 				InputV.CurrentValue = InputSettings.CurrentValue
 			end
